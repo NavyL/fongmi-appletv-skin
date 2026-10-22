@@ -43,7 +43,7 @@ def canvas(color):
 
 
 def navy():
-    """1: Yingxia's canvas #050917 with a faint blue light from the top left."""
+    """2: Yingxia's canvas #050917 with a faint blue light from the top left."""
     img = canvas("#050917")
     img = mix(img, "#13254F", 0.55 * glow(0.18, -0.05, 0.75, 0.65))
     img = mix(img, "#0B1430", 0.35 * glow(0.95, 1.1, 0.6, 0.5))
@@ -51,7 +51,7 @@ def navy():
 
 
 def dunes():
-    """2: Mac-style dunes in indigo dusk."""
+    """1 (default): Mac-style dunes in indigo dusk."""
     img = canvas("#070B1E")
     img = mix(img, "#2A2F66", 0.6 * glow(0.55, 0.15, 0.9, 0.55))
     img = mix(img, "#4A3A6E", 0.25 * glow(0.75, 0.35, 0.5, 0.3))
@@ -80,5 +80,5 @@ def black():
 
 if __name__ == "__main__":
     OUT.mkdir(parents=True, exist_ok=True)
-    for i, draw in enumerate([navy, dunes, ember, black], 1):
+    for i, draw in enumerate([dunes, navy, ember, black], 1):
         save(draw(), f"wallpaper_{i}.webp")
