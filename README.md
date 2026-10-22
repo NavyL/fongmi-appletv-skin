@@ -8,8 +8,10 @@ Only resources change; FongMi's code (`classes*.dex`), native libs and assets ar
 
 - `skin/res/` — the overlay. `values/*.xml` merge by resource name; other folders replace files by name.
 - `tools/check_ids.py` — a replaced layout must keep every upstream view id with the same class (ViewBinding).
-- `tools/gen_wallpapers.py` — draws `wallpaper_1..4.webp`.
+- `tools/gen_wallpapers.py` — draws `wallpaper_1..4.webp` (1 = dusk dunes, the default).
+- `tools/gen_rows.py` — generates the settings/dialog layouts from upstream's (marked GENERATED); re-run it after a version bump.
 - `keys/skin.jks` — signing key (backup in `E:\tv\backup\skin-key\`). Same key = in-place upgrades.
 
-Upgrade: run build.py with the new `--version`; if check_ids fails, sync that layout with upstream.
+Upgrade: `build.py --version <new>` once (decodes upstream), `gen_rows.py --base work/<new>-<abi>/base/res`, then `build.py` again;
+if check_ids fails, sync that hand-written layout with upstream.
 Signed with our own key, so FongMi's runtime modules (`com.fongmi.runtime.*`) can't be installed.
