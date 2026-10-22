@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- A focused card rises off the page: soft shadow, 180 ms ease-out, no overshoot. -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_focused="true">
+        <objectAnimator android:propertyName="translationZ" android:valueTo="10.0dp" android:duration="180" android:interpolator="@android:interpolator/decelerate_cubic" android:valueType="floatType" />
+    </item>
+    <item>
+        <objectAnimator android:propertyName="translationZ" android:valueTo="0.0dp" android:duration="140" android:interpolator="@android:interpolator/decelerate_quad" android:valueType="floatType" />
+    </item>
+</selector>

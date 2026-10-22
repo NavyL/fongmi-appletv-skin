@@ -1,0 +1,6 @@
+work/
+out/
+apk/
+keys/
+shots/emu-*
+*.idsig

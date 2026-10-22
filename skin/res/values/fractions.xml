@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- leanback row focus zoom (FongMi uses ZOOM_FACTOR_SMALL everywhere): 110% -> 106%, tvOS cards lift rather than balloon -->
+    <fraction name="lb_focus_zoom_factor_small">106.0%</fraction>
+</resources>

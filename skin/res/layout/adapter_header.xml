@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Section header (最近观看 / 更新推荐): tvOS section title, semibold, a little air above. -->
+<com.google.android.material.textview.MaterialTextView android:textSize="19.0sp" android:textColor="@color/white" android:id="@id/text" android:fontFamily="sans-serif-medium" android:paddingTop="14.0dp" android:paddingStart="2.0dp" android:layout_width="wrap_content" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android" />

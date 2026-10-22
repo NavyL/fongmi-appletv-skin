@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Home. Side padding stays 24dp: HistoryPresenter/Product size the cards from screen width - 48dp.
+     Toolbar: smaller logo, source name in medium weight, thin clock. Ids/classes as upstream (HomeActivity). -->
+<androidx.appcompat.widget.LinearLayoutCompat android:orientation="vertical" android:layout_width="match_parent" android:layout_height="match_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.appcompat.widget.LinearLayoutCompat android:gravity="center_vertical" android:orientation="horizontal" android:id="@id/toolbar" android:paddingTop="26.0dp" android:paddingBottom="14.0dp" android:layout_width="match_parent" android:layout_height="wrap_content" android:animateLayoutChanges="true" android:paddingStart="26.0dp" android:paddingEnd="26.0dp">
+        <androidx.appcompat.widget.AppCompatImageView android:id="@id/logo" android:layout_width="34.0dp" android:layout_height="34.0dp" android:src="@drawable/ic_logo" android:layout_marginEnd="12.0dp" />
+        <com.fongmi.android.tv.ui.custom.CustomTitleView android:textSize="22.0sp" android:textColor="@color/white" android:ellipsize="marquee" android:id="@id/title" android:focusable="false" android:fontFamily="sans-serif-medium" android:layout_width="0.0dp" android:layout_height="wrap_content" android:text="@string/app_name" android:singleLine="true" android:layout_weight="1.0" android:layout_marginEnd="16.0dp" />
+        <com.google.android.material.textview.MaterialTextView android:textSize="24.0sp" android:textColor="#D9FFFFFF" android:id="@id/clock" android:fontFamily="sans-serif-light" android:fontFeatureSettings="tnum" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+    <com.fongmi.android.tv.ui.custom.ProgressLayout android:id="@id/progressLayout" android:layout_width="match_parent" android:layout_height="match_parent">
+        <androidx.leanback.widget.VerticalGridView android:id="@id/recycler" android:paddingTop="8.0dp" android:paddingBottom="32.0dp" android:clipChildren="false" android:clipToPadding="false" android:layout_width="match_parent" android:layout_height="match_parent" android:paddingStart="24.0dp" android:paddingEnd="24.0dp" app:focusOutEnd="true" app:focusOutFront="true" />
+    </com.fongmi.android.tv.ui.custom.ProgressLayout>
+</androidx.appcompat.widget.LinearLayoutCompat>

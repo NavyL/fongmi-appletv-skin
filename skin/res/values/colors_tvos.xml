@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- tvOS palette, taken from Yingxia 1.5.1+ (App/GlassKit.swift): navy canvas, white focus, no brand hue. -->
+<resources>
+    <color name="tvos_canvas">#FF050917</color>
+    <color name="tvos_control">#FF172038</color>
+    <color name="tvos_raised">#FF212D4A</color>
+    <color name="tvos_panel">#FF131B30</color>
+    <color name="tvos_panel_glass">#EB131B30</color>
+    <color name="tvos_focus">#FFFFFFFF</color>
+    <color name="tvos_on_focus">#FF000000</color>
+    <color name="tvos_selected">#FFEBEBEB</color>
+    <color name="tvos_on_selected">#FF0F0F0F</color>
+    <color name="tvos_glass_focus">#66FFFFFF</color>
+    <color name="tvos_glass_rest">#1FFFFFFF</color>
+    <color name="tvos_hairline">#1AFFFFFF</color>
+    <color name="tvos_rim">#33FFFFFF</color>
+    <color name="tvos_badge">#73000000</color>
+    <color name="tvos_secondary">#99EBEBF5</color>
+    <color name="tvos_tertiary">#4DEBEBF5</color>
+    <color name="tvos_amber">#FFFFC24D</color>
+    <color name="tvos_rose">#FFF2616B</color>
+    <color name="tvos_shadow">#66000000</color>
+    <color name="tvos_focus_rim">#B3FFFFFF</color>
+</resources>

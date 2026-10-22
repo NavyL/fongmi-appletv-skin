@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Upstream: yellow when selected. tvOS: the current item is a light plate with dark text; focus stays white on glass. -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_focused="true" android:color="@color/white" />
+    <item android:state_selected="true" android:color="@color/tvos_on_selected" />
+    <item android:state_checked="true" android:color="@color/white" />
+    <item android:color="@color/white" />
+</selector>
