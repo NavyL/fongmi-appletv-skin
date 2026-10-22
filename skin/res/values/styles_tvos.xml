@@ -46,4 +46,23 @@
     <style name="Vod.Grid.Large" parent="@style/Vod.Grid">
         <item name="cornerSize">6.0dp</item>
     </style>
+
+    <!-- Player / live / cast control chips: tvOS pills (white focus, light "on" state for repeat etc.). -->
+    <style name="Control">
+        <item name="android:textSize">14.0sp</item>
+        <item name="android:textColor">@color/tvos_on_pill</item>
+        <item name="android:background">@drawable/selector_tvos_pill</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:gravity">center</item>
+        <item name="android:minHeight">30.0dp</item>
+        <item name="android:paddingStart">14.0dp</item>
+        <item name="android:paddingEnd">14.0dp</item>
+        <item name="android:paddingTop">6.0dp</item>
+        <item name="android:paddingBottom">6.0dp</item>
+        <item name="android:focusable">true</item>
+        <item name="android:focusableInTouchMode">true</item>
+        <item name="android:nextFocusUp">@id/exo_progress</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
 </resources>

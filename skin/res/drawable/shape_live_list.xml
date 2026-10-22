@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Live list panel: near-opaque glass so names stay readable over bright pictures. -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
-    <gradient android:angle="0" android:type="linear" android:startColor="#F0131B30" android:centerColor="#B3131B30" android:endColor="#00131B30" />
+    <gradient android:angle="0" android:type="linear" android:startColor="#F5131B30" android:centerColor="#E6131B30" android:endColor="#B3131B30" />
 </shape>

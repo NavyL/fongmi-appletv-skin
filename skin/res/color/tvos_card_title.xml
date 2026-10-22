@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Title under a card: secondary until its card has focus, then white (tvOS). -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_focused="true" android:color="@color/white" />
+    <item android:color="#A6FFFFFF" />
+</selector>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Live EPG row: title over time. Ids/classes as upstream. -->
+<com.fongmi.android.tv.ui.custom.CustomLeftRightLayout android:orientation="vertical" android:background="@drawable/selector_tvos_row" android:focusable="true" android:focusableInTouchMode="true" android:paddingStart="14.0dp" android:paddingEnd="14.0dp" android:paddingTop="8.0dp" android:paddingBottom="8.0dp" android:layout_width="wrap_content" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <com.google.android.material.textview.MaterialTextView android:textSize="15.0sp" android:textColor="@color/tvos_on_pill" android:ellipsize="marquee" android:id="@id/title" android:duplicateParentState="true" android:fontFamily="sans-serif-medium" android:layout_width="wrap_content" android:layout_height="wrap_content" android:singleLine="true" />
+    <com.google.android.material.textview.MaterialTextView android:textSize="13.0sp" android:textColor="@color/tvos_on_button_secondary" android:ellipsize="marquee" android:id="@id/time" android:duplicateParentState="true" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2.0dp" android:singleLine="true" android:fontFeatureSettings="tnum" />
+</com.fongmi.android.tv.ui.custom.CustomLeftRightLayout>

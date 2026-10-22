@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Search keyboard icon key (QR, cursor, delete, search...): tvOS key; icon turns black on focus. Ids/classes as upstream. -->
+<androidx.appcompat.widget.AppCompatImageView android:id="@id/icon" android:background="@drawable/selector_tvos_key" android:focusable="true" android:focusableInTouchMode="true" android:layout_width="40.0dp" android:layout_height="40.0dp" android:scaleType="center" app:tint="@color/tvos_on_button"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" />

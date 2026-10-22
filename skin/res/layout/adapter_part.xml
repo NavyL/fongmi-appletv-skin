@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Detail page chip (adapter_part): tvOS states — white focus, light current, navy rest. Ids/classes/focus links as upstream. -->
+<com.google.android.material.textview.MaterialTextView android:textSize="14.0sp" android:textColor="@color/tvos_on_pill" android:ellipsize="marquee" android:singleLine="true" android:nextFocusUp="@id/array" android:gravity="center" android:id="@id/text" android:background="@drawable/selector_tvos_pill" android:focusable="true" android:focusableInTouchMode="true" android:fontFamily="sans-serif-medium" android:minHeight="30.0dp" android:paddingStart="14.0dp" android:paddingEnd="14.0dp" android:paddingTop="6.0dp" android:paddingBottom="6.0dp" android:layout_width="wrap_content" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android" />

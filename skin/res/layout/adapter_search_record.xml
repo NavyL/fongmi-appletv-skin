@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Search record chip: tvOS pill. Ids/classes as upstream. -->
+<com.google.android.material.textview.MaterialTextView android:textSize="15.0sp" android:textColor="@color/tvos_on_pill" android:ellipsize="marquee" android:id="@id/text" android:background="@drawable/selector_tvos_pill" android:focusable="true" android:focusableInTouchMode="true" android:paddingStart="15.0dp" android:paddingEnd="15.0dp" android:paddingTop="7.0dp" android:paddingBottom="7.0dp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_margin="6.0dp" android:singleLine="true"
+  xmlns:android="http://schemas.android.com/apk/res/android" />

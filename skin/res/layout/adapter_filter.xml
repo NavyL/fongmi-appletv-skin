@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Filter value chip (点播 page filter rows): tvOS chip, smaller than the category tabs. Ids/classes as upstream. -->
+<com.google.android.material.textview.MaterialTextView android:textSize="14.0sp" android:textColor="@color/tvos_on_pill" android:id="@id/text" android:background="@drawable/selector_tvos_pill" android:focusable="true" android:focusableInTouchMode="true" android:gravity="center" android:minHeight="26.0dp" android:paddingStart="13.0dp" android:paddingEnd="13.0dp" android:paddingTop="4.0dp" android:paddingBottom="4.0dp" android:layout_width="wrap_content" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android" />
