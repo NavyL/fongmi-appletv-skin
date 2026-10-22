@@ -1,0 +1,7 @@
+{
+  "comment": "Applied by tools/build.py: own app identity so the skin installs next to the official FongMi.",
+  "package": "local.guangying.tv",
+  "upstream_package": "com.fongmi.android.tv",
+  "label": "光影",
+  "ffalcon_card": "card_guangying.png"
+}

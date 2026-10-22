@@ -9,6 +9,7 @@ APK untouched (apktool -s), so FongMi's behaviour stays exactly the upstream one
 
 import argparse
 import copy
+import re
 import shutil
 import subprocess
 import sys
@@ -111,6 +112,32 @@ def overlay(work):
         print(f"  {src_dir.name}: {sum(1 for _ in src_dir.iterdir())} file(s)")
 
 
+def brand(work):
+    """Own identity (skin/brand.json): package, provider authorities and the signature permission
+    move to the new package so both apps can be installed; the launcher activity gets the FFalcon
+    cyberui full-card meta-data. Class names in the manifest are fully qualified, so they stay put."""
+    import json
+    cfg = json.loads((ROOT / "skin" / "brand.json").read_text(encoding="utf-8"))
+    old, new = cfg["upstream_package"], cfg["package"]
+    m = work / "AndroidManifest.xml"
+    text = m.read_text(encoding="utf-8")
+    text = text.replace(f'package="{old}"', f'package="{new}"', 1)
+    text = re.sub(rf'android:authorities="{re.escape(old)}\.', f'android:authorities="{new}.', text)
+    text = text.replace(f"{old}.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION", f"{new}.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION")
+    home = f'android:name="{old}.ui.activity.HomeActivity"'
+    i = text.index(home)
+    j = text.index(">", i) + 1
+    if 'beidouui_icon' not in text:
+        card = cfg["ffalcon_card"]
+        text = text[:j] + f'\n            <meta-data android:name="beidouui_icon" android:value="{card}"/>' + text[j:]
+    m.write_text(text, encoding="utf-8")
+    assets = ROOT / "skin" / "assets"
+    if assets.exists():
+        for f in assets.iterdir():
+            shutil.copy2(f, work / "assets" / f.name)
+    print(f"  brand: {cfg['label']} ({new})")
+
+
 def sign(unsigned, out):
     props = dict(line.split("=", 1) for line in (ROOT / "keys/skin.properties").read_text().split() if "=" in line)
     aligned = unsigned.with_suffix(".aligned.apk")
@@ -145,12 +172,13 @@ def main():
             print("\n".join(problems))
             sys.exit("check_ids: skin layouts no longer match upstream; sync them first")
         overlay(work)
+        brand(work)
 
     out_dir = ROOT / "out"
     out_dir.mkdir(exist_ok=True)
     unsigned = out_dir / f"unsigned-{tag}.apk"
     run("java", "-jar", APKTOOL, "b", "-f", "-o", unsigned, work)
-    name = f"fongmi-{'plain' if args.plain else 'skin'}-{tag}.apk"
+    name = f"{'fongmi-plain' if args.plain else 'guangying'}-{tag}.apk"
     sign(unsigned, out_dir / name)
     unsigned.unlink()
     print("OK", out_dir / name)
