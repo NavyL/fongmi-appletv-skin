@@ -97,4 +97,14 @@
         <item name="colorSurfaceContainerLow">@color/tvos_sheet</item>
         <item name="colorSurface">@color/tvos_sheet</item>
     </style>
+
+    <!-- Upstream turns activity transitions off (Theme.Base windowAnimationStyle = NoAnim). Opening a
+         screen is handled by the content fade (anim/tvos_screen_enter, works on every Android version);
+         going back fades the closing screen out where the system honours app window animations (Android 11). -->
+    <style name="NoAnim">
+        <item name="android:activityOpenEnterAnimation">@null</item>
+        <item name="android:activityOpenExitAnimation">@null</item>
+        <item name="android:activityCloseEnterAnimation">@anim/tvos_close_enter</item>
+        <item name="android:activityCloseExitAnimation">@anim/tvos_close_exit</item>
+    </style>
 </resources>

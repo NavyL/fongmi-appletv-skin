@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Empty state: secondary text, like tvOS empty pages. Ids/classes as upstream. -->
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" android:clipChildren="false" android:clipToPadding="false" android:gravity="center" android:orientation="vertical" android:layout_width="wrap_content" android:layout_height="wrap_content">
+    <com.airbnb.lottie.LottieAnimationView android:layout_width="200.0dp" android:layout_height="224.0dp" app:lottie_autoPlay="true" app:lottie_loop="true" app:lottie_rawRes="@raw/empty" />
+    <com.google.android.material.textview.MaterialTextView android:textSize="17.0sp" android:textColor="@color/tvos_secondary" android:id="@id/text" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/error_empty" />
+</androidx.appcompat.widget.LinearLayoutCompat>

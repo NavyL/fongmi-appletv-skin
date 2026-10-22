@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Home function row (点播/直播/搜索/...): tvOS pills, white plate with black content when focused.
      Ids/classes as upstream (FuncPresenter). -->
-<androidx.appcompat.widget.LinearLayoutCompat android:gravity="center" android:orientation="horizontal" android:background="@drawable/selector_tvos_pill" android:focusable="true" android:focusableInTouchMode="true" android:paddingStart="18.0dp" android:paddingEnd="22.0dp" android:layout_width="wrap_content" android:layout_height="44.0dp" android:minWidth="108.0dp"
-  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" android:clipChildren="false" android:clipToPadding="false" android:gravity="center" android:orientation="horizontal" android:background="@drawable/selector_tvos_pill" android:focusable="true" android:focusableInTouchMode="true" android:paddingStart="18.0dp" android:paddingEnd="22.0dp" android:layout_width="wrap_content" android:layout_height="44.0dp" android:minWidth="108.0dp">
     <androidx.appcompat.widget.AppCompatImageView android:id="@id/icon" android:duplicateParentState="true" android:layout_width="22.0dp" android:layout_height="22.0dp" app:tint="@color/tvos_on_pill" />
     <com.google.android.material.textview.MaterialTextView android:textSize="17.0sp" android:textColor="@color/tvos_on_pill" android:id="@id/text" android:duplicateParentState="true" android:textFontWeight="500" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="8.0dp" />
 </androidx.appcompat.widget.LinearLayoutCompat>

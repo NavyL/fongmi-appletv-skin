@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Focus ring around switches in the playback panels: white in both states (upstream: yellow when on). -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_focused="true">
+        <inset android:insetLeft="4.0dp" android:insetRight="4.0dp" android:insetTop="0.0dp" android:insetBottom="0.0dp">
+            <shape android:shape="rectangle">
+                <solid android:color="@android:color/transparent" />
+                <corners android:radius="28.0dp" />
+                <stroke android:width="3.0dp" android:color="@color/tvos_focus" />
+            </shape>
+        </inset>
+    </item>
+    <item android:drawable="@android:color/transparent" />
+</selector>

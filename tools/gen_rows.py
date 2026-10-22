@@ -5,13 +5,17 @@ holding white labels and white icons. A white focus plate needs that content to 
 such view gets a tvOS selector and its texts/icons follow its state (duplicateParentState + colour
 selectors). Ids, classes and structure are untouched, so check_ids passes by construction.
 
-Re-run after each upstream version bump (build.py does not run it):
-    python -I tools/gen_rows.py --base work/<version>-<abi>/base/res
+build.py runs this on every build, so the layouts always follow the upstream version being skinned.
+Standalone: python -I tools/gen_rows.py --base work/<version>-<abi>/base/res
 """
 
 import argparse
+import sys
 import xml.etree.ElementTree as ET
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import unclip  # noqa: E402
 
 A = "{http://schemas.android.com/apk/res/android}"
 APP = "{http://schemas.android.com/apk/res-auto}"
@@ -22,7 +26,10 @@ SELECTORS = {
     "@drawable/selector_item": "@drawable/selector_tvos_tile",
     "@drawable/selector_chip_round": "@drawable/selector_tvos_pill",
     "@drawable/selector_button": "@drawable/selector_tvos_pill",
+    "@drawable/selector_chip": "@drawable/selector_tvos_pill",
 }
+# per-layout replacements where the generic choice would look wrong (two-line rows want a tile)
+SELECTOR_OVERRIDES = {"view_decoder_mode_row": "@drawable/selector_tvos_tile"}
 # Layouts generated here. Layouts with hand-written overrides in skin/res/layout are not listed.
 FILES = [
     # settings pages (rows of label + value, icon buttons)
@@ -34,8 +41,14 @@ FILES = [
     "dialog_config", "dialog_danmaku", "dialog_danmaku_search", "dialog_module", "dialog_mpv_conf",
     "dialog_pass", "dialog_player_engine", "dialog_single_input", "dialog_site",
     "dialog_subtitle_search", "dialog_track", "dialog_update", "activity_module", "activity_crash",
+    # player: parse-line chips, decoder mode rows
+    "adapter_parse", "view_decoder_mode_row",
 ]
+# screens taken from upstream unchanged except for the content fade when they open
+ENTER_ONLY = ["activity_vod", "activity_keep", "activity_file"]
+SCREEN_ENTER = "@anim/tvos_screen_enter"
 SETTINGS = False
+UPSTREAM = None
 CHECK_TINT = "#FF8E8E93"  # visible on both the white plate and navy; a checkbox keeps its own checked state
 
 
@@ -52,13 +65,13 @@ def is_check(el):
 
 
 def animator_for(view, tile):
-    """Grow with focus only where there is room: a full-width row in a dialog list would be clipped."""
-    full = view.get(A + "layout_width") in ("match_parent", "0.0dp")
+    """Settings pages grow the focused row a little (tvOS 1.02, icon buttons 1.05). Rows in dialogs and
+    sheets stay put like tvOS menus: their lists clip, and a grown row would lose its rounded ends."""
+    if not SETTINGS:
+        return "@animator/tvos_press_flat"
     if is_image(view):
         return "@animator/tvos_press"
-    if full and not SETTINGS:
-        return "@animator/tvos_press_flat"
-    return "@animator/tvos_press_tile" if (tile or full) else "@animator/tvos_press"
+    return "@animator/tvos_press_tile"
 
 
 def pad(el, h, v):
@@ -84,8 +97,9 @@ def restyle(view, pill):
     texts = [e for e in view.iter() if e is not view and is_text(e) and e.get(A + "background") is None]
     for i, t in enumerate(texts):
         t.set(A + "duplicateParentState", "true")
-        if t.get(A + "textColor") in ("@color/white", "@color/text", None):
-            primary = "@color/tvos_on_pill" if t.get(A + "textColor") == "@color/text" else "@color/tvos_on_button"
+        colour = t.get(A + "textColor")
+        if colour in ("@color/white", "@color/text", None) or (colour or "").startswith("?"):
+            primary = "@color/tvos_on_pill" if colour == "@color/text" else "@color/tvos_on_button"
             t.set(A + "textColor", primary if i == 0 else "@color/tvos_on_button_secondary")
     for e in (e for e in view.iter() if e is not view):
         if is_image(e):
@@ -95,13 +109,18 @@ def restyle(view, pill):
             e.set(APP + "buttonTint", CHECK_TINT)
 
 
-def main():
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--base", required=True, help="decoded upstream res dir")
-    base = Path(ap.parse_args().base)
+def generate(base, quiet=False):
+    """base: decoded upstream res dir."""
+    global UPSTREAM
+    base = Path(base)
+    UPSTREAM = base / "layout"
     ET.register_namespace("android", A[1:-1])
     ET.register_namespace("app", APP[1:-1])
     global SETTINGS
+    for name in ENTER_ONLY:
+        tree = ET.parse(base / "layout" / f"{name}.xml")
+        tree.getroot().set(A + "layoutAnimation", SCREEN_ENTER)
+        write(name, tree)
     for name in FILES:
         SETTINGS = name.startswith("activity_setting")
         tree = ET.parse(base / "layout" / f"{name}.xml")
@@ -111,15 +130,30 @@ def main():
                     del e.attrib[A + "padding"]
                     for k, v in (("paddingStart", "40.0dp"), ("paddingEnd", "40.0dp"), ("paddingTop", "30.0dp"), ("paddingBottom", "30.0dp")):
                         e.set(A + k, v)
+        if name.startswith("activity_") and name != "activity_crash":
+            tree.getroot().set(A + "layoutAnimation", SCREEN_ENTER)
         views = [e for e in tree.iter() if e.get(A + "background") in SELECTORS]
         for view in views:
-            restyle(view, SELECTORS[view.get(A + "background")])
-        body = ET.tostring(tree.getroot(), encoding="unicode")
-        (OUT / f"{name}.xml").write_text(
-            '<?xml version="1.0" encoding="utf-8"?>\n'
-            f"<!-- GENERATED by tools/gen_rows.py from upstream {name}.xml. Do not edit by hand. -->\n"
-            + body + "\n", encoding="utf-8")
-        print(f"{name}: {len(views)}")
+            restyle(view, SELECTOR_OVERRIDES.get(name, SELECTORS[view.get(A + "background")]))
+        write(name, tree)
+        if not quiet:
+            print(f"{name}: {len(views)}")
+    return len(FILES) + len(ENTER_ONLY)
+
+
+def write(name, tree):
+    unclip.apply(tree.getroot(), ET.parse(UPSTREAM / f"{name}.xml").getroot())
+    body = ET.tostring(tree.getroot(), encoding="unicode")
+    (OUT / f"{name}.xml").write_text(
+        '<?xml version="1.0" encoding="utf-8"?>\n'
+        f"<!-- GENERATED by tools/gen_rows.py from upstream {name}.xml. Do not edit by hand. -->\n"
+        + body + "\n", encoding="utf-8")
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--base", required=True, help="decoded upstream res dir")
+    generate(ap.parse_args().base)
 
 
 if __name__ == "__main__":

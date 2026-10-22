@@ -25,4 +25,6 @@
     <color name="tvos_sheet">#F5131B30</color>
     <color name="tvos_disabled_fill">#66172038</color>
     <color name="tvos_disabled_text">#59FFFFFF</color>
+    <!-- launch screen (upstream #141218 purple-black) -> the navy canvas -->
+    <color name="splash_background">#FF050917</color>
 </resources>

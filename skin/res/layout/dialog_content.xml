@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Synopsis dialog: calmer reading text for Inter. Ids/classes as upstream. -->
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android" android:clipChildren="false" android:clipToPadding="false" android:layout_width="match_parent" android:layout_height="match_parent" android:fillViewport="true">
+    <com.google.android.material.textview.MaterialTextView android:textSize="17.0sp" android:textColor="#EBFFFFFF" android:id="@id/text" android:padding="28.0dp" android:layout_width="match_parent" android:layout_height="wrap_content" android:lineSpacingExtra="8.0dp" android:letterSpacing="0.01" />
+</androidx.core.widget.NestedScrollView>

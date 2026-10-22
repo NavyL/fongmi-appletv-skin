@@ -25,6 +25,8 @@ ANDROID_NS = "http://schemas.android.com/apk/res/android"
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from check_ids import check_layouts  # noqa: E402
+import gen_rows  # noqa: E402
+import gen_type  # noqa: E402
 
 
 def run(*cmd):
@@ -135,6 +137,9 @@ def main():
     shutil.rmtree(work, ignore_errors=True)
     shutil.copytree(base, work)
     if not args.plain:
+        # layouts/styles derived from upstream are regenerated from the version being skinned
+        print(f"  generated: {gen_rows.generate(base / 'res', quiet=True)} layouts, "
+              f"{gen_type.generate(base / 'res', quiet=True)} text appearances", flush=True)
         problems = check_layouts(SKIN, base / "res")
         if problems:
             print("\n".join(problems))

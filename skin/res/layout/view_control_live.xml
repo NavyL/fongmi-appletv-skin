@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Live control bar: glass panel, more air, title-safe sides. Ids/classes as upstream. -->
-<androidx.appcompat.widget.LinearLayoutCompat android:layout_gravity="bottom" android:orientation="vertical" android:background="@drawable/shape_controller" android:paddingTop="18.0dp" android:paddingBottom="26.0dp" android:layout_width="match_parent" android:layout_height="wrap_content" android:paddingStart="40.0dp" android:paddingEnd="40.0dp"
-  xmlns:android="http://schemas.android.com/apk/res/android">
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android" android:clipChildren="false" android:clipToPadding="false" android:layout_gravity="bottom" android:orientation="vertical" android:background="@drawable/shape_controller" android:paddingTop="18.0dp" android:paddingBottom="26.0dp" android:layout_width="match_parent" android:layout_height="wrap_content" android:paddingStart="40.0dp" android:paddingEnd="40.0dp">
     <androidx.media3.ui.PlayerSeekView android:id="@id/seek" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="14.0dp" />
     <include android:id="@id/action" android:layout_width="match_parent" android:layout_height="wrap_content" layout="@layout/view_control_live_action" />
 </androidx.appcompat.widget.LinearLayoutCompat>

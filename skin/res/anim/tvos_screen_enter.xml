@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layoutAnimation xmlns:android="http://schemas.android.com/apk/res/android" android:animation="@anim/tvos_content_enter" android:delay="0" android:animationOrder="normal" />

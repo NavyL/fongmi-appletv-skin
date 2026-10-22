@@ -1,4 +1,3 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Search keyboard letter: tvOS key. Ids/classes as upstream. -->
-<com.google.android.material.textview.MaterialTextView android:stateListAnimator="@animator/tvos_press" android:textSize="17.0sp" android:textColor="@color/tvos_on_button" android:gravity="center" android:id="@id/text" android:background="@drawable/selector_tvos_key" android:focusable="true" android:focusableInTouchMode="true" android:textFontWeight="500" android:layout_width="40.0dp" android:layout_height="40.0dp"
-  xmlns:android="http://schemas.android.com/apk/res/android" />
+<com.google.android.material.textview.MaterialTextView xmlns:android="http://schemas.android.com/apk/res/android" android:stateListAnimator="@animator/tvos_press" android:textSize="17.0sp" android:textColor="@color/tvos_on_button" android:gravity="center" android:id="@id/text" android:background="@drawable/selector_tvos_key" android:focusable="true" android:focusableInTouchMode="true" android:textFontWeight="500" android:layout_width="40.0dp" android:layout_height="40.0dp" />
