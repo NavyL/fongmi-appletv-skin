@@ -2,7 +2,8 @@
 
 tvOS-style skin for FongMi TV, applied to the official release APK and shipped as its own app:
 **光影** (`local.guangying.tv`), installable next to the official 影视 (`com.fongmi.android.tv`).
-Only resources change; FongMi's code (`classes*.dex`), native libs and assets are copied untouched.
+Only resources change, plus one patched string: tools/patch_dex.py points the self-update URL at an
+unresolvable host (update check off). Native libs and assets are copied untouched.
 
     python -I tools/build.py --version 5.8.0 --abi armeabi_v7a   # -> out/guangying-5.8.0-armeabi_v7a.apk
     python -I tools/build.py --version 5.8.0 --plain             # round-trip without the skin

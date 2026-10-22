@@ -28,6 +28,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from check_ids import check_layouts  # noqa: E402
 import gen_rows  # noqa: E402
 import gen_type  # noqa: E402
+import patch_dex  # noqa: E402
 
 
 def run(*cmd):
@@ -173,6 +174,7 @@ def main():
             sys.exit("check_ids: skin layouts no longer match upstream; sync them first")
         overlay(work)
         brand(work)
+        patch_dex.main(work)
 
     out_dir = ROOT / "out"
     out_dir.mkdir(exist_ok=True)
