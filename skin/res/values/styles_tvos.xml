@@ -8,6 +8,10 @@
         <item name="android:windowTranslucentNavigation">true</item>
         <item name="android:windowBackground">@color/tvos_canvas</item>
         <item name="android:colorBackground">@color/tvos_canvas</item>
+        <!-- Type: Inter (SF Pro stand-in, as Aerial does), Medium by default like every tvOS text style; CJK falls back to the system font. -->
+        <item name="android:fontFamily">@font/tvos_text</item>
+        <item name="fontFamily">@font/tvos_text</item>
+        <item name="android:textFontWeight">500</item>
         <item name="colorPrimary">@color/white</item>
         <item name="colorOnPrimary">@color/tvos_on_focus</item>
         <item name="colorPrimaryContainer">@color/tvos_selected</item>
@@ -30,6 +34,9 @@
         <item name="colorSurfaceContainerHighest">@color/tvos_control</item>
         <item name="colorOutline">@color/tvos_rim</item>
         <item name="colorOutlineVariant">@color/tvos_hairline</item>
+        <item name="materialAlertDialogTheme">@style/ThemeOverlay.Tvos.Alert</item>
+        <item name="sideSheetDialogTheme">@style/ThemeOverlay.Tvos.SideSheet</item>
+        <item name="bottomSheetDialogTheme">@style/ThemeOverlay.Tvos.BottomSheet</item>
     </style>
 
     <style name="Shadow">
@@ -52,7 +59,7 @@
         <item name="android:textSize">14.0sp</item>
         <item name="android:textColor">@color/tvos_on_pill</item>
         <item name="android:background">@drawable/selector_tvos_pill</item>
-        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textFontWeight">500</item>
         <item name="android:gravity">center</item>
         <item name="android:minHeight">30.0dp</item>
         <item name="android:paddingStart">14.0dp</item>
@@ -64,5 +71,30 @@
         <item name="android:nextFocusUp">@id/exo_progress</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <!-- Glass dialogs/sheets: on Android 12+ the system blurs whatever is behind (Aerial's frosted
+         panels, done by the compositor); the panel colour is translucent there (values-v31) and
+         near-opaque on older TVs, where these attributes are ignored. -->
+    <style name="ThemeOverlay.Tvos.Alert" parent="@style/ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="android:windowBlurBehindEnabled">true</item>
+        <item name="android:windowBlurBehindRadius">@dimen/tvos_blur_behind</item>
+        <item name="android:backgroundDimAmount">0.35</item>
+        <item name="colorSurfaceContainerHigh">@color/tvos_sheet</item>
+        <item name="colorSurface">@color/tvos_sheet</item>
+    </style>
+    <style name="ThemeOverlay.Tvos.SideSheet" parent="@style/ThemeOverlay.Material3.SideSheetDialog">
+        <item name="android:windowBlurBehindEnabled">true</item>
+        <item name="android:windowBlurBehindRadius">@dimen/tvos_blur_behind</item>
+        <item name="android:backgroundDimAmount">0.25</item>
+        <item name="colorSurfaceContainerLow">@color/tvos_sheet</item>
+        <item name="colorSurface">@color/tvos_sheet</item>
+    </style>
+    <style name="ThemeOverlay.Tvos.BottomSheet" parent="@style/ThemeOverlay.Material3.BottomSheetDialog">
+        <item name="android:windowBlurBehindEnabled">true</item>
+        <item name="android:windowBlurBehindRadius">@dimen/tvos_blur_behind</item>
+        <item name="android:backgroundDimAmount">0.25</item>
+        <item name="colorSurfaceContainerLow">@color/tvos_sheet</item>
+        <item name="colorSurface">@color/tvos_sheet</item>
     </style>
 </resources>

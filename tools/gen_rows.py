@@ -35,6 +35,7 @@ FILES = [
     "dialog_pass", "dialog_player_engine", "dialog_single_input", "dialog_site",
     "dialog_subtitle_search", "dialog_track", "dialog_update", "activity_module", "activity_crash",
 ]
+SETTINGS = False
 CHECK_TINT = "#FF8E8E93"  # visible on both the white plate and navy; a checkbox keeps its own checked state
 
 
@@ -50,6 +51,16 @@ def is_check(el):
     return el.tag.endswith("CheckBox")
 
 
+def animator_for(view, tile):
+    """Grow with focus only where there is room: a full-width row in a dialog list would be clipped."""
+    full = view.get(A + "layout_width") in ("match_parent", "0.0dp")
+    if is_image(view):
+        return "@animator/tvos_press"
+    if full and not SETTINGS:
+        return "@animator/tvos_press_flat"
+    return "@animator/tvos_press_tile" if (tile or full) else "@animator/tvos_press"
+
+
 def pad(el, h, v):
     if el.get(A + "padding") is None and el.get(A + "paddingStart") is None and el.get(A + "paddingLeft") is None:
         el.set(A + "paddingStart", h)
@@ -61,6 +72,7 @@ def pad(el, h, v):
 def restyle(view, pill):
     view.set(A + "background", pill)
     tile = pill.endswith("tile")
+    view.set(A + "stateListAnimator", animator_for(view, tile))
     if is_image(view):
         view.set(APP + "tint", "@color/tvos_on_button")
         return
@@ -75,8 +87,6 @@ def restyle(view, pill):
         if t.get(A + "textColor") in ("@color/white", "@color/text", None):
             primary = "@color/tvos_on_pill" if t.get(A + "textColor") == "@color/text" else "@color/tvos_on_button"
             t.set(A + "textColor", primary if i == 0 else "@color/tvos_on_button_secondary")
-        if i == 0 and tile:
-            t.set(A + "fontFamily", "sans-serif-medium")
     for e in (e for e in view.iter() if e is not view):
         if is_image(e):
             e.set(A + "duplicateParentState", "true")
@@ -91,8 +101,16 @@ def main():
     base = Path(ap.parse_args().base)
     ET.register_namespace("android", A[1:-1])
     ET.register_namespace("app", APP[1:-1])
+    global SETTINGS
     for name in FILES:
+        SETTINGS = name.startswith("activity_setting")
         tree = ET.parse(base / "layout" / f"{name}.xml")
+        if SETTINGS:  # title-safe area (HIG: 80/60 pt at 1080p = 40/30 dp on FongMi's 960 canvas)
+            for e in tree.iter():
+                if e.get(A + "padding") == "24.0dp":
+                    del e.attrib[A + "padding"]
+                    for k, v in (("paddingStart", "40.0dp"), ("paddingEnd", "40.0dp"), ("paddingTop", "30.0dp"), ("paddingBottom", "30.0dp")):
+                        e.set(A + k, v)
         views = [e for e in tree.iter() if e.get(A + "background") in SELECTORS]
         for view in views:
             restyle(view, SELECTORS[view.get(A + "background")])

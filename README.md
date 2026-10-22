@@ -10,6 +10,9 @@ Only resources change; FongMi's code (`classes*.dex`), native libs and assets ar
 - `tools/check_ids.py` — a replaced layout must keep every upstream view id with the same class (ViewBinding).
 - `tools/gen_wallpapers.py` — draws `wallpaper_1..4.webp` (1 = dusk dunes, the default).
 - `tools/gen_rows.py` — generates the settings/dialog layouts from upstream's (marked GENERATED); re-run it after a version bump.
+- `skin/res/font/` — Inter Text/Display (OFL, `FONT-LICENSE-OFL.txt`), Latin subset ~1.2 MB; theme default weight 500 like tvOS, CJK falls back to the system font.
+- `tools/gen_selectors.py` — five-state selectors (disabled/pressed/focused/current/rest) and press animators.
+- Dialogs/sheets blur what is behind them on Android 12+ (`windowBlurBehind`); older TVs get a near-opaque panel.
 - `keys/skin.jks` — signing key (backup in `E:\tv\backup\skin-key\`). Same key = in-place upgrades.
 
 Upgrade: `build.py --version <new>` once (decodes upstream), `gen_rows.py --base work/<new>-<abi>/base/res`, then `build.py` again;

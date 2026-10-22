@@ -21,4 +21,8 @@
     <color name="tvos_rose">#FFF2616B</color>
     <color name="tvos_shadow">#66000000</color>
     <color name="tvos_focus_rim">#B3FFFFFF</color>
+    <!-- dialog/sheet panel; translucent only where the system blurs behind it (values-v31) -->
+    <color name="tvos_sheet">#F5131B30</color>
+    <color name="tvos_disabled_fill">#66172038</color>
+    <color name="tvos_disabled_text">#59FFFFFF</color>
 </resources>
