@@ -136,11 +136,22 @@ def drop_shadow(img, s, x, y):
     img.alpha_composite(sh.filter(ImageFilter.GaussianBlur(s * 0.07)), (x - pad, y - pad + int(s * 0.05)))
 
 
-def text_layer(w, h, text, px, weight, fill=(255, 255, 255, 255)):
+# The name beside the icon: Apple's wordmarks sit quietly next to the mark (PingFang Medium-ish,
+# a little tracking), so the text is lighter and smaller than the icon.
+TEXT_WEIGHT = 500     # Noto Sans SC wght axis
+TEXT_SIZE = 0.24      # of banner height
+TEXT_TRACKING = 0.06  # em, added between characters
+
+
+def text_layer(w, h, text, px, weight, fill=(255, 255, 255, 255), tracking=TEXT_TRACKING):
     font = ImageFont.truetype(str(FONT), px)
     font.set_variation_by_axes([weight])
     layer = Image.new("RGBA", (w, h), (0, 0, 0, 0))
-    ImageDraw.Draw(layer).text((0, 0), text, font=font, fill=fill)
+    d = ImageDraw.Draw(layer)
+    x = 0
+    for ch in text:
+        d.text((x, 0), ch, font=font, fill=fill)
+        x += d.textlength(ch, font=font) + px * tracking
     return layer.crop(layer.getbbox())
 
 
@@ -152,8 +163,8 @@ def banner(w, h):
     x, y = int(w * 0.11), (h - s) // 2
     drop_shadow(img, s, x, y)
     img.alpha_composite(icon, (x, y))
-    t = text_layer(w, h, NAME, int(h * 0.30), 600)
-    img.alpha_composite(t, (x + s + int(w * 0.07), (h - t.height) // 2))
+    t = text_layer(w, h, NAME, int(h * TEXT_SIZE), TEXT_WEIGHT)
+    img.alpha_composite(t, (x + s + int(w * 0.07), (h - t.height) // 2 - int(h * 0.01)))
     return img
 
 
@@ -162,7 +173,7 @@ def card(w, h):
     img = background(w, h)
     s = int(h * 0.42)
     icon = full_icon(s)
-    t = text_layer(w, h, NAME, int(h * 0.15), 600)
+    t = text_layer(w, h, NAME, int(h * 0.13), TEXT_WEIGHT)
     gap = int(h * 0.06)
     top = (h - (s + gap + t.height)) // 2
     drop_shadow(img, s, (w - s) // 2, top)
