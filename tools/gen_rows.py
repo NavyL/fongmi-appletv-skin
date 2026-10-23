@@ -45,7 +45,7 @@ FILES = [
     "adapter_parse", "view_decoder_mode_row",
 ]
 # screens taken from upstream unchanged except for the content fade when they open
-ENTER_ONLY = ["activity_vod", "activity_keep", "activity_file"]
+ENTER_ONLY = ["activity_vod"]
 SCREEN_ENTER = "@anim/tvos_screen_enter"
 SETTINGS = False
 UPSTREAM = None
@@ -130,6 +130,13 @@ def generate(base, quiet=False):
                     del e.attrib[A + "padding"]
                     for k, v in (("paddingStart", "40.0dp"), ("paddingEnd", "40.0dp"), ("paddingTop", "30.0dp"), ("paddingBottom", "30.0dp")):
                         e.set(A + k, v)
+        if SETTINGS:  # page title: the one plain 20sp label above the rows
+            for e in tree.iter():
+                if is_text(e) and e.get(A + "id") is None and e.get(A + "background") is None and e.get(A + "textSize") == "20.0sp":
+                    e.set(A + "textSize", "22.0sp")
+                    e.set(A + "fontFamily", "@font/tvos_display")
+                    e.set(A + "textFontWeight", "600")
+                    e.set(A + "layout_marginBottom", "18.0dp")
         if name.startswith("activity_") and name != "activity_crash":
             tree.getroot().set(A + "layoutAnimation", SCREEN_ENTER)
         views = [e for e in tree.iter() if e.get(A + "background") in SELECTORS]

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Loading: a thinner tvOS-like spinner, quiet traffic readout. Ids/classes as upstream. -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="match_parent" android:layout_height="match_parent">
+    <com.google.android.material.progressindicator.CircularProgressIndicator android:layout_gravity="center" android:layout_width="wrap_content" android:layout_height="wrap_content" android:indeterminate="true" app:indicatorSize="44.0dp" app:trackThickness="3.0dp" app:indicatorColor="#B3FFFFFF" />
+    <com.google.android.material.textview.MaterialTextView android:textSize="15.0sp" android:textColor="@color/tvos_secondary" android:layout_gravity="center" android:id="@id/traffic" android:visibility="gone" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="44.0dp" android:fontFeatureSettings="tnum" />
+</FrameLayout>

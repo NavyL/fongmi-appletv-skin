@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Over any wallpaper (built-in or the subscription's): keeps white text readable, as tvOS masks its backgrounds. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <gradient android:angle="270" android:startColor="#73000000" android:endColor="#33000000" />
+</shape>

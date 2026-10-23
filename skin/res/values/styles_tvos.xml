@@ -34,6 +34,8 @@
         <item name="colorSurfaceContainerHighest">@color/tvos_control</item>
         <item name="colorOutline">@color/tvos_rim</item>
         <item name="colorOutlineVariant">@color/tvos_hairline</item>
+        <item name="editTextStyle">@style/Widget.Tvos.EditText</item>
+        <item name="android:editTextStyle">@style/Widget.Tvos.EditText</item>
         <item name="materialAlertDialogTheme">@style/ThemeOverlay.Tvos.Alert</item>
         <item name="sideSheetDialogTheme">@style/ThemeOverlay.Tvos.SideSheet</item>
         <item name="bottomSheetDialogTheme">@style/ThemeOverlay.Tvos.BottomSheet</item>
@@ -106,5 +108,14 @@
         <item name="android:activityOpenExitAnimation">@null</item>
         <item name="android:activityCloseEnterAnimation">@anim/tvos_close_enter</item>
         <item name="android:activityCloseExitAnimation">@anim/tvos_close_exit</item>
+    </style>
+
+    <!-- Text fields (CustomEditText extends TextInputEditText, default style attr = editTextStyle). -->
+    <style name="Widget.Tvos.EditText" parent="@style/Widget.AppCompat.EditText">
+        <item name="android:background">@drawable/selector_tvos_field</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textColorHint">@color/tvos_tertiary</item>
+        <item name="android:textCursorDrawable">@drawable/shape_cursor</item>
+        <item name="android:textSize">16.0sp</item>
     </style>
 </resources>

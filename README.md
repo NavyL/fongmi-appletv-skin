@@ -20,6 +20,8 @@ unresolvable host (update check off). Native libs and assets are copied untouche
 - `tools/gen_type.py` — Material 3 type scale → Inter; `build.py` runs it and `gen_rows.py` on every build.
 - `tools/unclip.py` — containers don't clip growing focused controls, except direct parents of scrolling lists.
 - Screen open = in-app content fade (`anim/tvos_screen_enter`): Android 12+ TV builds ignore app window animations.
+- `tools/focus.py <text> <keycode>` — emulator helper: press a key until the control showing <text> has focus.
+- Text fields: `Widget.Tvos.EditText` via `editTextStyle`; wallpapers get a readability scrim (`view_wall.xml`).
 - `tools/gen_selectors.py` — five-state selectors (disabled/pressed/focused/current/rest) and press animators.
 - Dialogs/sheets blur what is behind them on Android 12+ (`windowBlurBehind`); older TVs get a near-opaque panel.
 - `keys/skin.jks` — signing key (backup in `E:\tv\backup\skin-key\`). Same key = in-place upgrades.

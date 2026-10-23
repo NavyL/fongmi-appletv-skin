@@ -32,7 +32,11 @@ def mix(base, color, weight):
     return base * (1 - weight[..., None]) + rgb(color) * weight[..., None]
 
 
+SCRIM_LIFT = 1.12  # the wallpaper scrim (drawable/tvos_wall_scrim) darkens everything; lift to compensate
+
+
 def save(img, name):
+    img = img * SCRIM_LIFT + 4
     img = img + rng.uniform(-1.2, 1.2, img.shape)  # dither: no banding on 8-bit panels
     Image.fromarray(np.clip(img, 0, 255).astype(np.uint8)).save(OUT / name, "WEBP", quality=92, method=6)
     print("wrote", name)
