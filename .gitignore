@@ -2,5 +2,5 @@ work/
 out/
 apk/
 keys/
-shots/emu-*
+shots/
 *.idsig

@@ -1,4 +1,4 @@
-# fongmi-skin → 光影
+# fongmi-appletv-skin → 光影
 
 tvOS-style skin for FongMi TV, applied to the official release APK and shipped as its own app:
 **光影** (`local.guangying.tv`), installable next to the official 影视 (`com.fongmi.android.tv`).
@@ -30,3 +30,10 @@ Upgrade: `build.py --version <new>` (decodes upstream and regenerates derived la
 if check_ids fails, sync that hand-written layout with upstream.
 Move data from the official app with FongMi's own 设置 → 备份 / 恢复 (`/sdcard/TV/backup`, shared by both).
 Signed with our own key, so FongMi's runtime modules (`com.fongmi.runtime.*`) can't be installed.
+
+## Licence
+
+GPL-3.0, like FongMi. This repository ships only the tooling and the resource overlay; it does not
+distribute FongMi's APK or a rebuilt one. Run `tools/build.py` against an official release you
+download yourself. Fonts: Inter (OFL), Noto Sans SC (OFL, fetched locally for brand art); icons:
+Material Symbols (Apache 2.0). 光影 is not affiliated with FongMi.
