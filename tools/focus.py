@@ -48,6 +48,7 @@ def main():
                 if any(text in t for t in last):
                     return 0
         subprocess.run(E + ["shell", "input", "keyevent", key], capture_output=True)
+    sys.stdout.reconfigure(errors="replace")
     print(f"focus: miss {text!r}; focus is on {last}")
     return 1
 
