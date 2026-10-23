@@ -118,12 +118,12 @@ def generate(base, quiet=False):
     ET.register_namespace("app", APP[1:-1])
     global SETTINGS
     for name in ENTER_ONLY:
-        tree = ET.parse(base / "layout" / f"{name}.xml")
+        tree = parse_upstream(name)
         tree.getroot().set(A + "layoutAnimation", SCREEN_ENTER)
         write(name, tree)
     for name in FILES:
         SETTINGS = name.startswith("activity_setting")
-        tree = ET.parse(base / "layout" / f"{name}.xml")
+        tree = parse_upstream(name)
         if SETTINGS:  # title-safe area (HIG: 80/60 pt at 1080p = 40/30 dp on FongMi's 960 canvas)
             for e in tree.iter():
                 if e.get(A + "padding") == "24.0dp":
@@ -146,6 +146,13 @@ def generate(base, quiet=False):
         if not quiet:
             print(f"{name}: {len(views)}")
     return len(FILES) + len(ENTER_ONLY)
+
+
+def parse_upstream(name):
+    path = UPSTREAM / f"{name}.xml"
+    if not path.exists():
+        raise SystemExit(f"gen_rows: upstream has no layout/{name}.xml any more; drop it from FILES/ENTER_ONLY")
+    return ET.parse(path)
 
 
 def write(name, tree):

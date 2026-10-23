@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Emulator helpers.  tools/emu.sh install <apk> | shot <name> | keys <keycode...> | home
-set -e
+set -eo pipefail
 E="adb -s ${EMU:-emulator-5554}"
 PKG="${PKG:-local.guangying.tv}"
 SHOTS="$(dirname "$0")/../shots"

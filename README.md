@@ -38,7 +38,7 @@
 
 ## 构建
 
-需要：JDK 17+、Android SDK（build-tools 37）、Python 3.11 + Pillow + numpy。
+需要：JDK 17+、Android SDK（`ANDROID_HOME` 指向它，用最新的 build-tools）、Python 3.11 + Pillow + numpy。
 
 ```sh
 # 生成自己的签名密钥（只做一次，别丢）
@@ -56,6 +56,15 @@ adb install -r out/guangying-5.8.0-armeabi_v7a.apk
 
 **限制**：用自己的密钥签名后，装不了官方的运行时模块（`com.fongmi.runtime.*`，有签名校验）。
 
+## 测试
+
+```sh
+pip install pytest
+python -m pytest            # 190 个用例，不到一秒
+```
+
+覆盖：`patch_dex`（合成的 dex 文件：替换、校验和、排序保护、锚点缺失）、`check_ids`、`merge_values`、清单改写、`unclip`、`gen_rows`，以及对 `skin/res` 的静态检查（XML 合法、无重复资源、自有引用都能解析、每个布局标明来源）。`work/` 下有解包好的官方 APK 时，还会对照真实布局校验 id，并确认关更新的锚点字符串仍在。
+
 ## 仓库结构
 
 | 路径 | 内容 |
@@ -68,6 +77,7 @@ adb install -r out/guangying-5.8.0-armeabi_v7a.apk
 | `tools/gen_selectors.py` / `gen_icons.py` / `gen_wallpapers.py` / `gen_brand.py` | 五态选择器、图标、壁纸、品牌素材 |
 | `tools/patch_dex.py` | 关闭自动更新（替换一个 URL 字符串，修正 dex 校验和） |
 | `tools/emu.sh` / `focus.py` / `readme_images.py` | 模拟器验收与 README 配图工具 |
+| `tests/` | pytest 用例，见上 |
 
 ## 许可
 
@@ -86,4 +96,4 @@ Design follows [Yingxia](https://github.com/jo32/tvbox-silicon) (a native tvOS T
 python -I tools/build.py --version 5.8.0 --abi armeabi_v7a   # -> out/guangying-5.8.0-armeabi_v7a.apk
 ```
 
-Needs JDK 17+, Android SDK build-tools 37, Python 3.11 with Pillow and numpy, and your own keystore in `keys/` (see 构建 above). The only code change is `tools/patch_dex.py`, which disables the self-update check. Re-signed builds cannot install FongMi's runtime modules. GPL-3.0; no APKs are distributed here.
+Needs JDK 17+, an Android SDK (`ANDROID_HOME`), Python 3.11 with Pillow and numpy, and your own keystore in `keys/` (see 构建 above). The only code change is `tools/patch_dex.py`, which disables the self-update check. Re-signed builds cannot install FongMi's runtime modules. `python -m pytest` runs the test suite. GPL-3.0; no APKs are distributed here.

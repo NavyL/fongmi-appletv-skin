@@ -35,8 +35,20 @@ def focused(root):
     return None
 
 
+def spellings(arg):
+    """The argument as given, plus its UTF-8 reading: a Git Bash / MSYS shell on Windows hands Python
+    UTF-8 bytes that get decoded with the ANSI code page, so Chinese arrives garbled."""
+    out = {arg}
+    try:
+        out.add(arg.encode("mbcs").decode("utf-8"))
+    except (UnicodeEncodeError, UnicodeDecodeError, LookupError):
+        pass
+    return out
+
+
 def main():
     text, key = sys.argv[1], sys.argv[2]
+    wanted = spellings(text)
     limit = int(sys.argv[3]) if len(sys.argv) > 3 else 14
     last = None
     for _ in range(limit):
@@ -45,7 +57,7 @@ def main():
             f = focused(root)
             if f is not None:
                 last = texts(f)
-                if any(text in t for t in last):
+                if any(w in t for w in wanted for t in last):
                     return 0
         subprocess.run(E + ["shell", "input", "keyevent", key], capture_output=True)
     sys.stdout.reconfigure(errors="replace")

@@ -3,12 +3,15 @@
     python -I tools/build.py --version 5.8.0 --abi armeabi_v7a          # skinned build
     python -I tools/build.py --version 5.8.0 --abi armeabi_v7a --plain  # round-trip only
 
-Only resources change: classes*.dex, lib/ and assets/ are copied from the official
-APK untouched (apktool -s), so FongMi's behaviour stays exactly the upstream one.
+Only resources change: lib/ and assets/ are copied from the official APK untouched (apktool -s),
+and the only edit to classes*.dex is tools/patch_dex.py (self-update check off).
 """
 
 import argparse
 import copy
+import json
+import os
+import platform
 import re
 import shutil
 import subprocess
@@ -20,7 +23,6 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 SKIN = ROOT / "skin" / "res"
 APKTOOL = ROOT / "tools" / "apktool_3.0.3.jar"
-BUILD_TOOLS = Path.home() / "AppData/Local/Android/Sdk/build-tools/37.0.0"
 RELEASE_URL = "https://github.com/FongMi/Release/releases/download/{version}/leanback-{abi}.apk"
 ANDROID_NS = "http://schemas.android.com/apk/res/android"
 
@@ -29,6 +31,24 @@ from check_ids import check_layouts  # noqa: E402
 import gen_rows  # noqa: E402
 import gen_type  # noqa: E402
 import patch_dex  # noqa: E402
+
+
+def build_tools():
+    """Newest build-tools under the SDK named by ANDROID_HOME / ANDROID_SDK_ROOT (or the default install)."""
+    candidates = [os.environ.get("ANDROID_HOME"), os.environ.get("ANDROID_SDK_ROOT"),
+                  Path.home() / "AppData/Local/Android/Sdk", Path.home() / "Android/Sdk", Path.home() / "Library/Android/sdk"]
+    for sdk in (Path(c) for c in candidates if c):
+        versions = sorted((p for p in (sdk / "build-tools").glob("*") if p.is_dir()),
+                          key=lambda p: [int(x) if x.isdigit() else 0 for x in p.name.split(".")])
+        if versions:
+            return versions[-1]
+    raise SystemExit("Android SDK build-tools not found; set ANDROID_HOME")
+
+
+def tool(name):
+    """Path of a build-tools executable, with the platform's suffix."""
+    suffix = {"zipalign": ".exe", "apksigner": ".bat", "aapt2": ".exe"} if platform.system() == "Windows" else {}
+    return build_tools() / (name + suffix.get(name, ""))
 
 
 def run(*cmd):
@@ -42,16 +62,19 @@ def fetch(version, abi):
         apk.parent.mkdir(exist_ok=True)
         url = RELEASE_URL.format(version=version, abi=abi)
         print("download", url, flush=True)
-        urllib.request.urlretrieve(url, apk)
+        partial = apk.with_suffix(".part")  # a broken download must not pass as the real file next time
+        urllib.request.urlretrieve(url, partial)
+        partial.replace(apk)
     return apk
 
 
 def decode(apk, base):
-    if (base / "apktool.yml").exists() and (base / ".source").read_text() == apk.name:
+    source = base / ".source"
+    if (base / "apktool.yml").exists() and source.exists() and source.read_text() == apk.name:
         return
     shutil.rmtree(base, ignore_errors=True)
     run("java", "-jar", APKTOOL, "d", "-s", "-f", "-o", base, apk)
-    (base / ".source").write_text(apk.name)
+    source.write_text(apk.name)
 
 
 def key_of(el):
@@ -59,18 +82,18 @@ def key_of(el):
 
 
 def merge_values(skin_dir, target_dir):
-    """Replace same-named resources in place; add new ones to skin_*.xml."""
+    """Replace same-named resources in place; add new ones to skin_*.xml. Returns (replaced, added)."""
     index = {}
     trees = {}
-    for path in sorted(target_dir.glob("*.xml")):
+    for path in sorted(Path(target_dir).glob("*.xml")):
         if path.name == "public.xml":
             continue
         tree = ET.parse(path)
         trees[path] = tree
         for el in tree.getroot():
             index[key_of(el)] = (path, el)
-    changed = set()
-    for skin_file in sorted(skin_dir.glob("*.xml")):
+    changed, replaced, added_total = set(), 0, 0
+    for skin_file in sorted(Path(skin_dir).glob("*.xml")):
         added = ET.Element("resources")
         for el in ET.parse(skin_file).getroot():
             if not isinstance(el.tag, str):
@@ -78,21 +101,23 @@ def merge_values(skin_dir, target_dir):
             hit = index.get(key_of(el))
             if hit:
                 path, old = hit
+                tail = old.tail
                 old.clear()
-                old.tag, old.text, old.tail = el.tag, el.text, old.tail
+                old.tag, old.text, old.tail = el.tag, el.text, tail
                 old.attrib.update(el.attrib)
                 for child in el:
                     old.append(copy.deepcopy(child))
                 changed.add(path)
+                replaced += 1
             else:
                 added.append(copy.deepcopy(el))
         if len(added):
-            out = target_dir / f"skin_{skin_file.name}"
+            out = Path(target_dir) / f"skin_{skin_file.name}"
             ET.ElementTree(added).write(out, encoding="utf-8", xml_declaration=True)
-            print(f"  values: +{len(added)} new from {skin_file.name}")
+            added_total += len(added)
     for path in changed:
         trees[path].write(path, encoding="utf-8", xml_declaration=True)
-        print(f"  values: replaced entries in {path.name}")
+    return replaced, added_total
 
 
 def overlay(work):
@@ -100,11 +125,11 @@ def overlay(work):
     res = work / "res"
     for src_dir in sorted(p for p in SKIN.iterdir() if p.is_dir()):
         dst_dir = res / src_dir.name
-        if src_dir.name.startswith("values"):
-            dst_dir.mkdir(exist_ok=True)
-            merge_values(src_dir, dst_dir)
-            continue
         dst_dir.mkdir(exist_ok=True)
+        if src_dir.name.startswith("values"):
+            replaced, added = merge_values(src_dir, dst_dir)
+            print(f"  {src_dir.name}: {replaced} replaced, {added} added")
+            continue
         for f in sorted(src_dir.iterdir()):
             # A drawable may exist under another extension (png vs xml vs webp); drop it so names stay unique.
             for stale in dst_dir.glob(f.stem + ".*"):
@@ -113,39 +138,54 @@ def overlay(work):
         print(f"  {src_dir.name}: {sum(1 for _ in src_dir.iterdir())} file(s)")
 
 
-def brand(work):
-    """Own identity (skin/brand.json): package, provider authorities and the signature permission
-    move to the new package so both apps can be installed; the launcher activity gets the FFalcon
-    cyberui full-card meta-data. Class names in the manifest are fully qualified, so they stay put."""
-    import json
-    cfg = json.loads((ROOT / "skin" / "brand.json").read_text(encoding="utf-8"))
+def rebrand_manifest(text, cfg):
+    """Own identity: package, provider authorities and the signature permission move to the new
+    package so both apps can be installed; the launcher activity gets the FFalcon cyberui full-card
+    meta-data. Class names in the manifest are fully qualified, so they stay put."""
     old, new = cfg["upstream_package"], cfg["package"]
-    m = work / "AndroidManifest.xml"
-    text = m.read_text(encoding="utf-8")
+    if f'package="{old}"' not in text:
+        raise SystemExit(f"brand: manifest package is not {old}; update skin/brand.json")
     text = text.replace(f'package="{old}"', f'package="{new}"', 1)
     text = re.sub(rf'android:authorities="{re.escape(old)}\.', f'android:authorities="{new}.', text)
     text = text.replace(f"{old}.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION", f"{new}.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION")
     home = f'android:name="{old}.ui.activity.HomeActivity"'
-    i = text.index(home)
-    j = text.index(">", i) + 1
-    if 'beidouui_icon' not in text:
-        card = cfg["ffalcon_card"]
-        text = text[:j] + f'\n            <meta-data android:name="beidouui_icon" android:value="{card}"/>' + text[j:]
-    m.write_text(text, encoding="utf-8")
+    if home not in text:
+        raise SystemExit("brand: HomeActivity not found in the manifest; upstream moved it")
+    if "beidouui_icon" not in text:
+        j = text.index(">", text.index(home)) + 1
+        text = text[:j] + f'\n            <meta-data android:name="beidouui_icon" android:value="{cfg["ffalcon_card"]}"/>' + text[j:]
+    return text
+
+
+def brand(work):
+    cfg = json.loads((ROOT / "skin" / "brand.json").read_text(encoding="utf-8"))
+    m = work / "AndroidManifest.xml"
+    m.write_text(rebrand_manifest(m.read_text(encoding="utf-8"), cfg), encoding="utf-8")
     assets = ROOT / "skin" / "assets"
     if assets.exists():
         for f in assets.iterdir():
             shutil.copy2(f, work / "assets" / f.name)
-    print(f"  brand: {cfg['label']} ({new})")
+    print(f"  brand: {cfg['label']} ({cfg['package']})")
+
+
+def read_properties(path):
+    """Java-style key=value lines; values keep inner spaces."""
+    props = {}
+    for line in Path(path).read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        if line and not line.startswith("#") and "=" in line:
+            k, v = line.split("=", 1)
+            props[k.strip()] = v.strip()
+    return props
 
 
 def sign(unsigned, out):
-    props = dict(line.split("=", 1) for line in (ROOT / "keys/skin.properties").read_text().split() if "=" in line)
+    props = read_properties(ROOT / "keys/skin.properties")
     aligned = unsigned.with_suffix(".aligned.apk")
-    run(BUILD_TOOLS / "zipalign.exe", "-P", "16", "-f", "4", unsigned, aligned)
-    run(BUILD_TOOLS / "apksigner.bat", "sign", "--ks", ROOT / props["storeFile"], "--ks-key-alias", props["keyAlias"],
+    run(tool("zipalign"), "-P", "16", "-f", "4", unsigned, aligned)
+    run(tool("apksigner"), "sign", "--ks", ROOT / props["storeFile"], "--ks-key-alias", props["keyAlias"],
         "--ks-pass", "pass:" + props["storePassword"], "--out", out, aligned)
-    run(BUILD_TOOLS / "apksigner.bat", "verify", out)
+    run(tool("apksigner"), "verify", out)
     aligned.unlink()
 
 

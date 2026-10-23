@@ -21,7 +21,6 @@ SHAPES = {
     "row": ("8.0dp", None),                            # rows over video: clear at rest
 }
 PRESSED = "#FFD4D4D8"   # the white plate dips to light grey while OK is held
-DISABLED_ALPHA = "#66"  # rest fill at 40%
 
 
 def shape(fill, radius):
