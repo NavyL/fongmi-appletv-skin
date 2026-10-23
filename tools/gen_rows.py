@@ -48,6 +48,7 @@ FILES = [
 ENTER_ONLY = ["activity_vod"]
 SCREEN_ENTER = "@anim/tvos_screen_enter"
 SETTINGS = False
+ROW_GAP = "20.0dp"
 UPSTREAM = None
 CHECK_TINT = "#FF8E8E93"  # visible on both the white plate and navy; a checkbox keeps its own checked state
 
@@ -130,6 +131,10 @@ def generate(base, quiet=False):
                     del e.attrib[A + "padding"]
                     for k, v in (("paddingStart", "40.0dp"), ("paddingEnd", "40.0dp"), ("paddingTop", "30.0dp"), ("paddingBottom", "30.0dp")):
                         e.set(A + k, v)
+        if SETTINGS:  # a little more air between rows (upstream 16dp)
+            for e in tree.iter():
+                if e.get(A + "layout_marginTop") == "16.0dp":
+                    e.set(A + "layout_marginTop", ROW_GAP)
         if SETTINGS:  # page title: the one plain 20sp label above the rows
             for e in tree.iter():
                 if is_text(e) and e.get(A + "id") is None and e.get(A + "background") is None and e.get(A + "textSize") == "20.0sp":

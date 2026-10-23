@@ -41,6 +41,11 @@
         <item name="bottomSheetDialogTheme">@style/ThemeOverlay.Tvos.BottomSheet</item>
     </style>
 
+    <style name="Theme.Crash" parent="@style/Theme.Base">
+        <item name="android:windowBackground">@color/tvos_canvas</item>
+        <item name="android:windowDisablePreview">true</item>
+    </style>
+
     <style name="Shadow">
         <item name="android:shadowColor">#99000000</item>
         <item name="android:shadowDx">0.0</item>

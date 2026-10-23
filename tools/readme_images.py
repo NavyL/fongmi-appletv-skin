@@ -39,7 +39,7 @@ SOURCE_BTN = (140, 50, 560, 135)          # "⌄ <source name>" button on the ho
 HISTORY = (40, 370, 420, 745)             # 最近观看 card + title
 DETAIL_SOURCE = (955, 205, 1245, 262)     # "站源: <name>" line on the detail page
 SETTING_URLS = [(960, 70, 1620, 150), (960, 200, 1620, 280), (960, 330, 1620, 410)]
-SEARCH_HISTORY = (800, 140, 1420, 235)
+SEARCH_HISTORY = (800, 140, 1720, 240)
 
 if __name__ == "__main__":
     pair = Image.new("RGB", (1920 * 2 + 40, 1080), (8, 10, 18))
