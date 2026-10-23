@@ -74,7 +74,7 @@ python -m pytest            # 190 个用例，不到一秒
 | `tools/build.py` | 下载 → `apktool d` → 覆盖 → 品牌 → 关更新 → `apktool b` → zipalign → apksigner |
 | `tools/check_ids.py` | 替换的布局必须保留官方的每个 view id 和类型（ViewBinding） |
 | `tools/gen_rows.py` / `gen_type.py` | 从官方布局和 Material 3 字体样式生成 tvOS 版本，每次构建自动运行 |
-| `tools/gen_selectors.py` / `gen_icons.py` / `gen_wallpapers.py` / `gen_brand.py` | 五态选择器、图标、壁纸、品牌素材（`gen_brand.py --source skin/brand-source.png` 从一张方形图派生图标、横幅、启动画面和桌面卡片） |
+| `tools/gen_selectors.py` / `gen_icons.py` / `import_wallpapers.py` / `gen_brand.py` | 五态选择器、图标、壁纸（四张图 → `wallpaper_1..4.webp`；`gen_wallpapers.py` 是无图时的代码画法）、品牌素材（`gen_brand.py --source skin/brand-source.png` 从一张方形图派生图标、横幅、启动画面和桌面卡片） |
 | `tools/patch_dex.py` | 关闭自动更新（替换一个 URL 字符串，修正 dex 校验和） |
 | `tools/emu.sh` / `focus.py` / `readme_images.py` | 模拟器验收与 README 配图工具 |
 | `tests/` | pytest 用例，见上 |
