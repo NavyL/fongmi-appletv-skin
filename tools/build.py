@@ -1,7 +1,7 @@
 """Reskin an official FongMi release APK with the resources in skin/res.
 
-    python -I tools/build.py --version 5.8.0 --abi armeabi_v7a          # skinned build
-    python -I tools/build.py --version 5.8.0 --abi armeabi_v7a --plain  # round-trip only
+    python -I tools/build.py --version 5.8.2 --abi armeabi_v7a          # skinned build
+    python -I tools/build.py --version 5.8.2 --abi armeabi_v7a --plain  # round-trip only
 
 Only resources change: lib/ and assets/ are copied from the official APK untouched (apktool -s),
 and the only edit to classes*.dex is tools/patch_dex.py (self-update check off).
