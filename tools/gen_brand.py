@@ -155,11 +155,23 @@ def text_layer(w, h, text, px, weight, fill=(255, 255, 255, 255), tracking=TEXT_
     return layer.crop(layer.getbbox())
 
 
+# Launcher art shows the mark alone, like the other apps' banners on Aerial / cyberui (user's choice
+# 2026-10-25). WITH_TEXT = True restores the wordmark beside / under the icon.
+WITH_TEXT = False
+
+
 def banner(w, h):
-    """TV banner (320x180 dp): icon at the left, name at the right."""
+    """TV banner (320x180 dp): icon centred; with WITH_TEXT, icon at the left and the name at the right."""
     img = background(w, h)
     s = int(h * 0.56)
     icon = full_icon(s)
+    if not WITH_TEXT:
+        s = int(h * 0.62)
+        icon = full_icon(s)
+        x, y = (w - s) // 2, (h - s) // 2
+        drop_shadow(img, s, x, y)
+        img.alpha_composite(icon, (x, y))
+        return img
     x, y = int(w * 0.11), (h - s) // 2
     drop_shadow(img, s, x, y)
     img.alpha_composite(icon, (x, y))
@@ -169,8 +181,15 @@ def banner(w, h):
 
 
 def card(w, h):
-    """FFalcon cyberui full card (700x450 asset): icon above the name, centred."""
+    """FFalcon cyberui full card (700x450 asset): icon centred; with WITH_TEXT, the name under it."""
     img = background(w, h)
+    if not WITH_TEXT:
+        s = int(h * 0.52)
+        icon = full_icon(s)
+        x, y = (w - s) // 2, (h - s) // 2
+        drop_shadow(img, s, x, y)
+        img.alpha_composite(icon, (x, y))
+        return img.convert("RGB")
     s = int(h * 0.42)
     icon = full_icon(s)
     t = text_layer(w, h, NAME, int(h * 0.13), TEXT_WEIGHT)
