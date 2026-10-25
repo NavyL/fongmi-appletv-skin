@@ -36,6 +36,10 @@
 左侧边栏导航、首页直接显示分类、焦点固定内容滚动、进入详情不自动播放、随焦点变化的背景、时钟去秒。
 这些要从源码编译，而当前版本依赖的播放器库尚未公开，见 [FongMi/TV#764](https://github.com/FongMi/TV/issues/764)。
 
+切换源的列表打开时先停在第一项、再跳到当前源，这是上游的行为（对话框先显示，再 `post` 一次 `scrollToPosition`），不是皮肤造成的：
+在同一台电视上用官方 APK 测得一样的跳动。每帧的布局耗时和站点数成正比（小米 75 寸上约每站 10 ms），所以订阅里站点越少跳动越短；
+皮肤侧试过固定列表高度、去掉复选框动画图标、关闭窗口模糊，都没有改善，已全部撤回。
+
 ## 构建
 
 需要：JDK 17+、Android SDK（`ANDROID_HOME` 指向它，用最新的 build-tools）、Python 3.11 + Pillow + numpy。
@@ -46,8 +50,8 @@ keytool -genkeypair -keystore keys/skin.jks -alias skin -keyalg RSA -keysize 307
 printf 'storeFile=keys/skin.jks\nkeyAlias=skin\nstorePassword=<密码>\n' > keys/skin.properties
 
 # 下载官方 leanback-<abi>.apk、解包、覆盖皮肤、签名
-python -I tools/build.py --version 5.8.0 --abi armeabi_v7a     # -> out/guangying-5.8.0-armeabi_v7a.apk
-adb install -r out/guangying-5.8.0-armeabi_v7a.apk
+python -I tools/build.py --version 5.8.2 --abi armeabi_v7a     # -> out/guangying-5.8.2-armeabi_v7a.apk
+adb install -r out/guangying-5.8.2-armeabi_v7a.apk
 ```
 
 官方升级后，换个 `--version` 再跑一遍。`build.py` 会从新版本重新生成派生的布局和样式；如果官方改了某个手写覆盖的布局的 view id，`check_ids` 会报出具体文件，同步后再构建。
@@ -93,7 +97,7 @@ An Apple TV (tvOS) style skin for [FongMi/TV](https://github.com/FongMi/TV), app
 Design follows [Yingxia](https://github.com/jo32/tvbox-silicon) (a native tvOS TVBox client), [Aerial](https://github.com/pengchujin/aerial-tv) and Apple's HIG: navy canvas, white focus with black content, Inter typography, five focus states, blurred glass sheets (Android 12+), Material Symbols icons, content fade on screen open, title-safe margins.
 
 ```sh
-python -I tools/build.py --version 5.8.0 --abi armeabi_v7a   # -> out/guangying-5.8.0-armeabi_v7a.apk
+python -I tools/build.py --version 5.8.2 --abi armeabi_v7a   # -> out/guangying-5.8.2-armeabi_v7a.apk
 ```
 
 Needs JDK 17+, an Android SDK (`ANDROID_HOME`), Python 3.11 with Pillow and numpy, and your own keystore in `keys/` (see 构建 above). The only code change is `tools/patch_dex.py`, which disables the self-update check. Re-signed builds cannot install FongMi's runtime modules. `python -m pytest` runs the test suite. GPL-3.0; no APKs are distributed here.
