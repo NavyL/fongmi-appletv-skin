@@ -4,3 +4,4 @@ apk/
 keys/
 shots/
 *.idsig
+__pycache__/
