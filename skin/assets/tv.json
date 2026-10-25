@@ -1,0 +1,7 @@
+{
+  "urls": [
+    {"url": "https://navyl.github.io/tv-sub/best.json", "name": "光影 · 精选"},
+    {"url": "https://cdn.jsdelivr.net/gh/NavyL/tv-sub@main/best.json", "name": "光影 · 精选（jsDelivr 备用）"},
+    {"url": "https://navyl.github.io/tv-sub/multi.json", "name": "光影 · 多仓"}
+  ]
+}

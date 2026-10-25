@@ -56,6 +56,8 @@ adb install -r out/guangying-5.8.2-armeabi_v7a.apk
 
 官方升级后，换个 `--version` 再跑一遍。`build.py` 会从新版本重新生成派生的布局和样式；如果官方改了某个手写覆盖的布局的 view id，`check_ids` 会报出具体文件，同步后再构建。
 
+**内置订阅入口**：APK 里打包了 `assets/tv.json`（指向 [NavyL/tv-sub](https://github.com/NavyL/tv-sub) 的精选单仓，GitHub Pages 主地址、jsDelivr 备用、多仓索引三条）。首次使用在 设置 → 点播 输入 `assets://tv.json` 即可，不用再输长地址。FongMi 本身没有"默认订阅"机制，真正免输入需要改代码，资源皮肤做不到。
+
 **从官方「影视」迁移数据**：在影视里 设置 → 备份，再到光影里 设置 → 恢复（两边共用 `/sdcard/TV/backup`）。订阅自带壁纸的，装好后在 设置 → 壁纸 行按 🏠 切回内置壁纸。
 
 **限制**：用自己的密钥签名后，装不了官方的运行时模块（`com.fongmi.runtime.*`，有签名校验）。
